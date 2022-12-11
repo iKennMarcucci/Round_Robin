@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <title>Round Robin Scheduling</title>
+</head>
+
+<body>
+    <header class="navbar bg-dark">
+        <div class="container-fluid d-flex justify-content-center">
+            <h1 class="display-3 fst-italic fw-semibold text-white">Round Robin Scheduling</h1>
+        </div>
+    </header>
+    <main>
+        <div class="container my-5">
+            <center>
+                <div class="accordion my-2 w-75" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                                aria-controls="panelsStayOpen-collapseTwo">
+                                ¿Qué es el Algoritmo de Planificación Round Robin?
+                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingTwo">
+                            <div class="accordion-body">
+                                <b>El Algoritmo de planiﬁcación Round Robin</b> está diseñado especialmente para
+                                sistemas de tiempo compartido. Se define un intervalo de tiempo denominado "Quantum",
+                                cuya duración varía según el sistema. La cola de procesos se estructura como una cola
+                                circular. El planiﬁcador la recorre asignando un cuanto de tiempo a cada proceso. La
+                                organización de la cola es FIFO. El Quantum se suele implantar mediante un temporizador
+                                que genera una interrupción cuando se agota el Quantum de tiempo. Si el proceso agota su
+                                ráfaga de CPU antes de ﬁnalizar el Quantum, el planiﬁcador asigna la CPU inmediatamente
+                                a otro proceso. Este algoritmo tiene un tiempo de espera relativamente grande. Sin
+                                embargo, garantiza un reparto de la CPU entre todos los usuarios y arroja tiempos de
+                                respuesta buenos.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+            <div class="row">
+                <div class="col text-center">
+                    <table class="table table-striped table-bordered" id="tablaProcesos">
+                        <h2 class="fst-italic">Input</h2>
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Process</th>
+                                <th scope="col">CPU Burst</th>
+                                <th scope="col">Arrival Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">P1</th>
+                                <td><input class="text-center border-0 bg-transparent" name="cpu" type="number"
+                                        style="width: 25%;" value="8" autocomplete="off"></td>
+                                <td><input class="text-center border-0 bg-transparent" type="number" style="width: 25%;"
+                                        value="0" disabled></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">P2</th>
+                                <td><input class="text-center border-0 bg-transparent" name="cpu" type="number"
+                                        style="width: 25%;" value="6" autocomplete="off"></td>
+                                <td><input class="text-center border-0 bg-transparent" type="number" style="width: 25%;"
+                                        value="1" disabled></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">P3</th>
+                                <td><input class="text-center border-0 bg-transparent" name="cpu" type="number"
+                                        style="width: 25%;" value="4" autocomplete="off"></td>
+                                <td><input class="text-center border-0 bg-transparent" type="number" style="width: 25%;"
+                                        value="2" disabled></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">P4</th>
+                                <td><input class="text-center border-0 bg-transparent" name="cpu" type="number"
+                                        style="width: 25%;" value="2" autocomplete="off"></td>
+                                <td><input class="text-center border-0 bg-transparent" type="number" style="width: 25%;"
+                                        value="3" disabled></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center  my-3">
+                        <div class="form-floating" style="width: 16%;">
+                            <input type="number" class="form-control" id="floatingQuantum" name="quantum"
+                                placeholder="Quantum" required>
+                            <label for="floatingQuantum">Quantum</label>
+                        </div>
+                    </div>
+                    <input type="button" class="btn btn-outline-dark" value="Insert Process" onclick="insertRow()">
+                    <input type="button" class="btn btn-outline-dark" value="Run to Output" onclick="execute()">
+                </div>
+                <div class="col" style="max-width: 5%;"></div>
+                <div class="col text-center">
+                    <h2 class="fst-italic">Output</h2>
+                    <div class="card font-monospace text-start text-white bg-dark"
+                        style="display: flex; overflow-y: auto; max-height: 350px;" id="bajable">
+                        <div class="card-header fw-semibold">
+                            Round Robin Scheduling Process Terminal
+                        </div>
+                        <div class="card-body" id="salida">
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col" id="ciclostotales">
+                            <p class="mb-0"><strong>Ciclos Totales</strong></p>
+                            <input type="text" id="idciclostotales" class="border-0 text-center" value="" disabled>
+                        </div>
+                        <div class="col" id="tiempototal">
+                            <p class="mb-0"><strong>Tiempo Total</strong></p>
+                            <input type="text" id="idtiempototal" class="border-0 text-center" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/RoundRobin.js"></script>
+</body>
+
+</html>
