@@ -81,7 +81,7 @@ async function roundRobin(quantum) {
             }
             ciclos++;
             await sleep(750);
-            bodycard.innerHTML += '<p class="badge text-bg-primary">' + "Cycle #" + ciclos + '</p>     ';
+            bodycard.innerHTML += '<p class="badge text-bg-primary">' + "Cycle #" + ciclos + '</p>';
             if (arrayProcesos[i] > 0) {
                 bodycard.innerHTML += '<p class="badge text-bg-success">' + "Time --> " + tiempo + '</p>';
                 col1.textContent = valoranterior + ' to ' + tiempo;
@@ -90,7 +90,7 @@ async function roundRobin(quantum) {
                 tbody.appendChild(row1);
                 ganttchart.appendChild(tbody);
                 tbody.appendChild(row2);
-            ganttchart.appendChild(tbody);
+                ganttchart.appendChild(tbody);
             } else {
                 bodycard.innerHTML += '<p class="badge text-bg-danger">' + "FINAL TIME --> " + times[i] + '</p>';
                 col1.textContent = valoranterior + ' to ' + tiempo;
@@ -99,7 +99,7 @@ async function roundRobin(quantum) {
                 tbody.appendChild(row1);
                 ganttchart.appendChild(tbody);
                 tbody.appendChild(row2);
-            ganttchart.appendChild(tbody);
+                ganttchart.appendChild(tbody);
             }
             await sleep(2000);
         }
