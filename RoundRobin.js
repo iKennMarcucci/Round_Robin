@@ -3,7 +3,7 @@ let times = [];
 function insertRow() {
     let nFilas = document.getElementById('tablaProcesos').getElementsByTagName('tr').length;
     let tablaProcesos = document.getElementById('tablaProcesos').insertRow(nFilas);
-    let col0 = tablaProcesos.insertCell(0)
+    let col0 = tablaProcesos.insertCell(0);
     let col1 = tablaProcesos.insertCell(1);
     let col2 = tablaProcesos.insertCell(2);
 
@@ -20,7 +20,6 @@ function execute() {
         i++;
     });
     let quantum = document.getElementById('floatingQuantum');
-    console.log(quantum.value);
     if (quantum.value != '') {
         roundRobin(quantum);
     } else {
@@ -35,18 +34,38 @@ async function roundRobin(quantum) {
     let bodycard = document.getElementById('salida');
     let idciclostotales = document.getElementById('idciclostotales');
     let idtiempototal = document.getElementById('idtiempototal');
+    let ganttchart = document.getElementById('ganttchart');
+    const tbody = document.createElement('tbody');
+    const row1 = document.createElement('tr');
+    const row2 = document.createElement('tr');
+    ganttchart.innerHTML = '';
+    var valoranterior = 0;
     idciclostotales.value = '';
     idtiempototal.value = '';
     bodycard.innerHTML = '';
     bodycard.innerHTML += '<p>--> Quantum: ' + quantum.value + '</p>';
-    bodycard.innerHTML += '<p>--> Cantidad de Procesos: ' + (arrayProcesos.length) + '</p>';
+    bodycard.innerHTML += '<p>--> Number of Processes: ' + (arrayProcesos.length) + '</p>';
+    const title1 = document.createElement('th');
+    title1.textContent = 'Time Elapsed'
+    const title2 = document.createElement('th');
+    title2.textContent = 'Process'
+    row1.appendChild(title1);
+    row2.appendChild(title2);
+    tbody.appendChild(row1);
+    ganttchart.appendChild(tbody);
+    tbody.appendChild(row2);
+    ganttchart.appendChild(tbody);
     await sleep(1000);
     for (let i = 0; i < arrayProcesos.length && !terminado; i++) {
         if (arrayProcesos[i] > 0) {
+            const col1 = document.createElement('td');
+            const col2 = document.createElement('td');
             bodycard.innerHTML += '<p></p>';
-            bodycard.innerHTML += '<p class="badge text-bg-warning">' + "============== Proceso #" + i + " ==============" + '</p>';
+            bodycard.innerHTML += '<p class="badge text-bg-warning">' + "============== Process #" + i + " ==============" + '</p>';
+            col2.textContent = 'P' + (i + 1);
+            row2.appendChild(col2);
             await sleep(750);
-            bodycard.innerHTML += '<p>' + " • Ráfaga de CPU a procesar = " + arrayProcesos[i] + '</p>';
+            bodycard.innerHTML += '<p>' + " • CPU burst to process = " + arrayProcesos[i] + '</p>';
             arrayProcesos[i] -= parseInt(quantum.value);
             if (arrayProcesos[i] > 0) {
                 tiempo += parseInt(quantum.value);
@@ -56,17 +75,31 @@ async function roundRobin(quantum) {
             }
             await sleep(750);
             if (arrayProcesos[i] > 0) {
-                bodycard.innerHTML += '<p>' + " • Ráfaga de CPU procesada  = " + arrayProcesos[i] + '</p>';
+                bodycard.innerHTML += '<p>' + " • CPU burst processed  = " + arrayProcesos[i] + '</p>';
             } else {
-                bodycard.innerHTML += '<p>' + " • Ráfaga de CPU procesada  = 0" + '</p>';
+                bodycard.innerHTML += '<p>' + " • CPU burst processed  = 0" + '</p>';
             }
             ciclos++;
             await sleep(750);
-            bodycard.innerHTML += '<p class="badge text-bg-primary">' + "Ciclo #" + ciclos + '</p>     ';
+            bodycard.innerHTML += '<p class="badge text-bg-primary">' + "Cycle #" + ciclos + '</p>     ';
             if (arrayProcesos[i] > 0) {
-                bodycard.innerHTML += '     <p class="badge text-bg-success">' + "Tiempo --> " + tiempo + '</p>';
+                bodycard.innerHTML += '<p class="badge text-bg-success">' + "Time --> " + tiempo + '</p>';
+                col1.textContent = valoranterior + ' to ' + tiempo;
+                valoranterior = tiempo;
+                row1.appendChild(col1);
+                tbody.appendChild(row1);
+                ganttchart.appendChild(tbody);
+                tbody.appendChild(row2);
+            ganttchart.appendChild(tbody);
             } else {
-                bodycard.innerHTML += '     <p class="badge text-bg-danger">' + "Tiempo FINAL (TAT) --> " + times[i] + '</p>';
+                bodycard.innerHTML += '<p class="badge text-bg-danger">' + "FINAL TIME --> " + times[i] + '</p>';
+                col1.textContent = valoranterior + ' to ' + tiempo;
+                valoranterior = tiempo;
+                row1.appendChild(col1);
+                tbody.appendChild(row1);
+                ganttchart.appendChild(tbody);
+                tbody.appendChild(row2);
+            ganttchart.appendChild(tbody);
             }
             await sleep(2000);
         }
@@ -81,8 +114,8 @@ async function roundRobin(quantum) {
         }
     }
     await sleep(500);
-    bodycard.innerHTML += '<p><b>' + "--> Ciclos Totales = " + ciclos + '</b></p>';
-    bodycard.innerHTML += '<p><b>' + "--> Tiempo Total = " + tiempo + '</b></p>';
+    bodycard.innerHTML += '<p><b>' + "--> Total Cycles = " + ciclos + '</b></p>';
+    bodycard.innerHTML += '<p><b>' + "--> Total Time = " + tiempo + '</b></p>';
     idciclostotales.value = ciclos;
     idtiempototal.value = tiempo;
     await sleep(1);
